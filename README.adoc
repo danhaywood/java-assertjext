@@ -7,9 +7,14 @@
 
 image:https://travis-ci.org/danhaywood/java-assertjext.png?branch=master[Build Status, link="https://travis-ci.org/danhaywood/java-assertjext"]
 
-For the moment, this repo contains a single utility to adapt Hamcrest's Matcher API into AssertJ's Condition API.
+This repo contains a (very small) collection of utilities for working with link:http://joel-costigliola.github.io/assertj/[AssertJ].  Right now there are just two:
 
-That means you can write things such as:
+* an adapter class to allow link:http://hamcrest.org[Hamcrest]'s `Matcher` API into AssertJ's `Condition` API.
+* a shell script to convert (the most common) Hamcrest style assertThat's into corresponding AssertJ ones.
+
+## The `Conditions` adapter
+
+The `Conditions` adapter allows you to use Hamcrest Matchers directly within AssertJ.  That means you can write things such as:
 
 [source,java]
 ----
@@ -40,7 +45,7 @@ The `matchedBy` is a factory method that returns the adapter; just add this stat
 import static com.danhaywood.java.assertjext.Conditions.matchedBy;
 ----
 
-## Maven Dependencies
+### Maven Dependencies
 
 Add the following to the `<dependencies>` section of your `pom.xml`:
 
@@ -53,6 +58,16 @@ Add the following to the `<dependencies>` section of your `pom.xml`:
     <scope>test</scope>
 </dependency>
 ----
+
+## The Convert Assertions Shell Script
+
+The `convert-hamcrest-assertions-to-assertj.sh` script is intended to be run against your source code from the command line.  It searches all files matching a pattern and replaces the most common `assertThat()` Hamcrest assertions to their corresponding AssertJ ones.
+
+The script itself can be found link:http://github.com/danhaywood/java-assertjext/blob/master/convert-hamcrest-assertions-to-assertj.sh?raw=true[here].
+
+Run the script from the root of the source you want to convert.  If no arguments are passed, it will search for files names `*Test.java`.  Use `-h` to see other options.
+
+TIP: if it looks familiar then that's because it is adapted from the link:http://joel-costigliola.github.io/assertj/assertj-core-converting-junit-assertions-to-assertj.html[similar script] that AssertJ provides for converting JUnit assertions.  However, `sed -i` seems to be broken on Windows, so I changed the looping to handle that.
 
 ## Legal Stuff
 
