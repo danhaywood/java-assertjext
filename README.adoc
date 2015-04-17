@@ -1,0 +1,76 @@
+= AssertJ Extensions
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ./
+:_imagesdir: images/
+:toc: right
+:numbered:
+
+[![Build Status](https://travis-ci.org/danhaywood/java-assertjext.png?branch=master)](https://travis-ci.org/danhaywood/java-assertjext)
+
+For the moment, this repo contains a single utility to adapt Hamcrest's Matcher API into AssertJ's Condition API.
+
+That means you can write things such as:
+
+[source,java]
+----
+final int actual = 3;
+assertThat(actual).is(matchedBy(Matchers.equalTo(3)));
+----
+
+and
+
+[source,java]
+----
+final String actual = "how now brown cow";
+assertThat(actual).is(matchedBy(Matchers.containsString("now brown")));
+----
+
+and
+
+[source,java]
+----
+final List<String> actual = Arrays.asList("how","now","brown","cow");
+assertThat(actual).is(matchedBy(Matchers.containsInAnyOrder("brown", "now", "cow", "how")));
+----
+
+The `matchedBy` is a factory method that returns the adapter; just add this static import:
+
+[source,java]
+----
+import static com.danhaywood.java.assertjext.Conditions.matchedBy;
+----
+
+## Maven Dependencies
+
+Add the following to the `<dependencies>` section of your `pom.xml`:
+
+[source,xml]
+----
+<dependency>
+    <groupId>com.danhaywood.java</groupId>
+    <artifactId>danhaywood-java-assertjext</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <scope>test</scope>
+</dependency>
+----
+
+## Legal Stuff
+
+### License
+
+----
+Copyright 2015 Dan Haywood
+
+Licensed under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+----
