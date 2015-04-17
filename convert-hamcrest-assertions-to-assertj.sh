@@ -46,6 +46,7 @@ for EXPRESSION in \
 's/assertThat(\(.*\),.*is(\(.*\)))/assertThat(\1).isEqualTo(\2)/g' \
 's/assertThat(\(.*\),.*not(containsString(\(.*\))))/assertThat(\1).doesNotContain(\2)/g' \
 's/assertThat(\(.*\),.*containsString(\(.*\)))/assertThat(\1).contains(\2)/g' \
+'s/assertThat(\(.*\),[^a-zA-Z]*\(.*\))/assertThat(\1).is(matchedBy(\2))/g' \
 's/org\.junit\.Assert\.assertThat\;/org.assertj.core.api.Assertions.assertThat\;/g'
 do
     echo ""

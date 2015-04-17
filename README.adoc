@@ -108,13 +108,14 @@ For example:
                   "this is not really my passphrase"
 
 where
+
 * `$1` is the release version
 * `$2` is the snapshot version
 * `$3` is the email of the secret key (`~/.gnupg/secring.gpg`) to use for signing
 * `$4` is the corresponding passphrase for that secret key.
 
 Other ways of specifying the key and passphrase are available, see the `pgp-maven-plugin`'s
-[documentation](http://kohsuke.org/pgp-maven-plugin/secretkey.html)).
+link:http://kohsuke.org/pgp-maven-plugin/secretkey.html[documentation].
 
 If the script completes successfully, then push changes:
 
