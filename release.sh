@@ -11,16 +11,6 @@ if [ ! "$RELEASE_VERSION" -o ! "$SNAPSHOT_VERSION" -o ! "$KEYID" -o ! "$PASSPHRA
 fi
 
 
-echo ""
-echo "checking no reference to -SNAPSHOT"
-echo ""
-grep SNAPSHOT pom.xml
-if [ $? == 0 ]; then
-    echo ""
-    echo "... failed" >&2
-    exit 1
-fi
-
 
 echo ""
 echo "sanity check (mvn clean install -o)"
