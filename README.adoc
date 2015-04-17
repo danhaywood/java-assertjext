@@ -5,7 +5,7 @@
 :toc: right
 :numbered:
 
-[![Build Status](https://travis-ci.org/danhaywood/java-assertjext.png?branch=master)](https://travis-ci.org/danhaywood/java-assertjext)
+image:https://travis-ci.org/danhaywood/java-assertjext.png?branch=master[Build Status, link="https://travis-ci.org/danhaywood/java-assertjext"]
 
 For the moment, this repo contains a single utility to adapt Hamcrest's Matcher API into AssertJ's Condition API.
 
