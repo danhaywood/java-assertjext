@@ -98,7 +98,7 @@ The `release.sh` script automates the release process.  It performs the followin
 * bumps the `pom.xml` to a specified release version, and tag
 * performs a double check (`mvn clean install -o`) that everything still builds ok
 * releases the code using `mvn clean deploy`
-* bumps the `pom.xml` to a specified release version
+* bumps the `pom.xml` to a specified snapshot version
 
 For example:
 
