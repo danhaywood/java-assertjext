@@ -7,14 +7,31 @@
 
 image:https://travis-ci.org/danhaywood/java-assertjext.png?branch=master[Build Status, link="https://travis-ci.org/danhaywood/java-assertjext"]
 
-This repo contains a (very small) collection of utilities for working with link:http://joel-costigliola.github.io/assertj/[AssertJ].  Right now there are just two:
+Suppose you have been using link:http://hamcrest.org/JavaHamcrest/[Hamcrest] for your tests, but would like to move to link:joel-costigliola.github.io/assertj[AssertJ] to take advantage of its fluent API and better "discoverability" within an IDE.  On the other hand you have a bunch of assertions that need porting over and you don't much fancy changing them all by hand.
+
+This repo provides two tools, intended to be used together, that can help.
+
+* a shell script to convert (the most common) Hamcrest style assertThat's into corresponding AssertJ ones.
 
 * an adapter class to allow link:http://hamcrest.org[Hamcrest]'s `Matcher` API into AssertJ's `Condition` API.
-* a shell script to convert (the most common) Hamcrest style assertThat's into corresponding AssertJ ones.
+
+Read on to learn more...
+
+## The Convert Assertions Shell Script
+
+The first tool is the `convert-hamcrest-assertions-to-assertj.sh` script.  This is intended to be run against your source code from the command line, replacing the most common `assertThat()` Hamcrest assertions to their corresponding AssertJ ones.
+
+The script itself can be found link:http://github.com/danhaywood/java-assertjext/blob/master/convert-hamcrest-assertions-to-assertj.sh?raw=true[here].
+
+Run the script from the root of the source you want to convert.  If no arguments are passed, it will search for files names `*Test.java`.  Use `-h` to see other options.
+
+TIP: the script is adapted from the link:http://joel-costigliola.github.io/assertj/assertj-core-converting-junit-assertions-to-assertj.html[similar script] that AssertJ provides for converting JUnit assertions.  It also fixes an issue of using `sed -i` which seems to be broken on Windows.
 
 ## The `Conditions` adapter
 
-The `Conditions` adapter allows you to use Hamcrest Matchers directly within AssertJ.  That means you can write things such as:
+One of the benefits of Hamcrest, of course, is the extensibility of is `Matcher` API.  So even if most of your assertions are run of the mill simple stuff covered by the conversion script, you are bound to have some more exotic assertions too.
+
+AssertJ itself has an API similar to Hamcrest's `Matcher`, called `Condition`.  The `Conditions` adapter provided by this repo allows you to use Hamcrest ``Matcher``s directly within AssertJ.  That means you can write things such as:
 
 [source,java]
 ----
@@ -38,14 +55,18 @@ final List<String> actual = Arrays.asList("how","now","brown","cow");
 assertThat(actual).is(matchedBy(Matchers.containsInAnyOrder("brown", "now", "cow", "how")));
 ----
 
-The `matchedBy` is a factory method that returns the adapter; just add this static import:
+In the above the `matchedBy` is a factory method that returns the adapter; just add this static import:
 
 [source,java]
 ----
 import static com.danhaywood.java.assertjext.Conditions.matchedBy;
 ----
 
-### Maven Dependencies
+Going back to the <<The Convert Assertions Shell Script>>, if you look at the last substitution you'll see that the last sed expression actually uses this syntax.  Thus, running the script should fully migrate all of your existing Hamcrest style assertions.
+
+At this point you then have a choice: you can either rewrite those Hamcrest assertions to corresponding AssertJ ones, or leave them as is.  You can also continue to tap into the power of Hamcrest if and when you find you can better express the intent that way (even Joel, AssertJ's maintainer, straightforwardly recognizes this, eg as in link:http://stackoverflow.com/a/26745752/56880[this Stackoverflow answer].
+
+## Maven Dependencies
 
 Add the following to the `<dependencies>` section of your `pom.xml`:
 
@@ -54,20 +75,13 @@ Add the following to the `<dependencies>` section of your `pom.xml`:
 <dependency>
     <groupId>com.danhaywood.java</groupId>
     <artifactId>danhaywood-java-assertjext</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.0-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
 ----
 
-## The Convert Assertions Shell Script
+I intend to release this to Maven Central.  Until then you;ll need to clone the repo and build from source directly using `mvn clean install`.
 
-The `convert-hamcrest-assertions-to-assertj.sh` script is intended to be run against your source code from the command line.  It searches all files matching a pattern and replaces the most common `assertThat()` Hamcrest assertions to their corresponding AssertJ ones.
-
-The script itself can be found link:http://github.com/danhaywood/java-assertjext/blob/master/convert-hamcrest-assertions-to-assertj.sh?raw=true[here].
-
-Run the script from the root of the source you want to convert.  If no arguments are passed, it will search for files names `*Test.java`.  Use `-h` to see other options.
-
-TIP: if it looks familiar then that's because it is adapted from the link:http://joel-costigliola.github.io/assertj/assertj-core-converting-junit-assertions-to-assertj.html[similar script] that AssertJ provides for converting JUnit assertions.  However, `sed -i` seems to be broken on Windows, so I changed the looping to handle that.
 
 ## Legal Stuff
 
@@ -90,7 +104,7 @@ specific language governing permissions and limitations
 under the License.
 ----
 
-#### Release to Maven Central ####
+## Release Notes (using Sonatype OSSRH)
 
 The `release.sh` script automates the release process.  It performs the following:
 
