@@ -20,7 +20,7 @@ language governing permissions and limitations under the License.
 
     <groupId>com.danhaywood.java</groupId>
     <artifactId>danhaywood-java-assertjext</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
 
     <name>Java AssertJ Hamcrest Adapter</name>
