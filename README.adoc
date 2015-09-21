@@ -5,9 +5,9 @@
 :toc: right
 :numbered:
 
-image:https://travis-ci.org/danhaywood/java-assertjext.png?branch=master[Build Status, link="https://travis-ci.org/danhaywood/java-assertjext"]
+image:https://travis-ci.org/danhaywood/java-assertjext.png?branch=master[Build Status, link="https://travis-ci.org/danhaywood/java-assertjext.png"]
 
-Suppose you have been using link:http://hamcrest.org/JavaHamcrest/[Hamcrest] for your tests, but would like to move to link:joel-costigliola.github.io/assertj[AssertJ] to take advantage of its fluent API and better "discoverability" within an IDE.  On the other hand you have a bunch of assertions that need porting over and you don't much fancy changing them all by hand.
+Suppose you have been using link:http://hamcrest.org/JavaHamcrest/[Hamcrest] for your tests, but would like to move to link:http://joel-costigliola.github.io/assertj[AssertJ] to take advantage of its fluent API and better "discoverability" within an IDE.  On the other hand you have a bunch of assertions that need porting over and you don't much fancy changing them all by hand.
 
 This repo provides two tools, intended to be used together, that can help.
 
@@ -75,12 +75,12 @@ Add the following to the `<dependencies>` section of your `pom.xml`:
 <dependency>
     <groupId>com.danhaywood.java</groupId>
     <artifactId>danhaywood-java-assertjext</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <scope>test</scope>
 </dependency>
 ----
 
-I intend to release this to Maven Central.  Until then you;ll need to clone the repo and build from source directly using `mvn clean install`.
+If you want to use the latest SNAPSHOT, change the `<version>` to `0.1.1-SNAPSHOT`.
 
 
 ## Legal Stuff

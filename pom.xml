@@ -25,7 +25,7 @@ language governing permissions and limitations under the License.
 
     <groupId>com.danhaywood.java</groupId>
     <artifactId>danhaywood-java-assertjext</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
 
     <name>Java AssertJ Hamcrest Adapter</name>
@@ -163,7 +163,6 @@ language governing permissions and limitations under the License.
                             <link>http://docs.oracle.com/javase/7/docs/api/</link>
                             <link>http://docs.oracle.com/javase/6/docs/api/</link>
                             <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
-                            <link>http://docs.oracle.com/javase/1.4.2/docs/api/</link>
                         </links>
                         <linksource>true</linksource>
                         <detectOfflineLinks>false</detectOfflineLinks>
