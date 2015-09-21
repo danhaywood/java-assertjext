@@ -17,15 +17,10 @@ language governing permissions and limitations under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
 
     <groupId>com.danhaywood.java</groupId>
     <artifactId>danhaywood-java-assertjext</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Java AssertJ Hamcrest Adapter</name>
@@ -79,8 +74,43 @@ language governing permissions and limitations under the License.
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>1.3.1</version>
+                    <configuration>
+                        <rules>
+                            <requireMavenVersion>
+                                <version>[3.2.1,)</version>
+                            </requireMavenVersion>
+                            <requireJavaVersion>
+                                <version>[1.8.0,)</version>
+                            </requireJavaVersion>
+                            <requirePluginVersions>
+                                <message>All plugin versions must be
+                                    defined!</message>
+                                <banLatest>true</banLatest>
+                                <banRelease>true</banRelease>
+                            </requirePluginVersions>
+                            <!--
+                            RELAXED!
+                            <DependencyConvergence />
+                            -->
+                        </rules>
+                    </configuration>
+                    <!-- goal:enforce supposedly binds to phase:validate, but explicit binding seems to be required -->
+                    <executions>
+                        <execution>
+                            <id>validate-enforce</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.5.1</version>
+                    <version>3.1</version>
                     <configuration>
                         <showDeprecation>false</showDeprecation>
                         <showWarnings>false</showWarnings>
@@ -90,7 +120,8 @@ language governing permissions and limitations under the License.
                 </plugin>
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.3.1</version>
+                    <version>2.4</version>
+                    <inherited>true</inherited>
                     <executions>
                         <execution>
                             <id>package-test-jar</id>
@@ -109,73 +140,54 @@ language governing permissions and limitations under the License.
                         </archive>
                     </configuration>
                 </plugin>
-
                 <plugin>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>2.1.2</version>
-                    <executions>
-                        <execution>
-                            <id>package-jars</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                                <goal>test-jar</goal>
-                            </goals>
-                            <configuration>
-                                <includePom>true</includePom>
-                            </configuration>
-                        </execution>
-                    </executions>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.16</version>
                     <configuration>
-                        <includePom>true</includePom>
+                        <includes>
+                            <include>**/*Test.java</include>
+                            <include>**/*Test$*.java</include>
+                            <include>**/*Test*_*.java</include>
+                            <include>**/*Spec*.java</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/*ForTesting.java</exclude>
+                            <exclude>**/*Abstract*.java</exclude>
+                        </excludes>
+                        <useFile>true</useFile>
+                        <printSummary>true</printSummary>
+                        <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                     </configuration>
                 </plugin>
-
                 <plugin>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.8</version>
-                    <inherited>true</inherited>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>2.16</version>
+                    <configuration>
+                        <showSuccess>false</showSuccess>
+                    </configuration>
                     <executions>
                         <execution>
-                            <id>package-jars</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                                <goal>test-jar</goal>
-                            </goals>
-                            <configuration>
-                                <includePom>true</includePom>
-                            </configuration>
+                            <phase>test</phase>
                         </execution>
                     </executions>
-                    <configuration>
-                        <debug>true</debug>
-                        <minmemory>128m</minmemory>
-                        <maxmemory>1024m</maxmemory>
-                        <quiet>true</quiet>
-                        <doctitle>${project.name} ${project.version}</doctitle>
-                        <windowtitle>${project.name} ${project.version}</windowtitle>
-                        <testDoctitle>${project.name} ${project.version} (TEST API)</testDoctitle>
-                        <testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>
-                        <splitindex>true</splitindex>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                        <links>
-                            <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                            <link>http://docs.oracle.com/javase/6/docs/api/</link>
-                            <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
-                        </links>
-                        <linksource>true</linksource>
-                        <detectOfflineLinks>false</detectOfflineLinks>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
+
         <plugins>
+            <!-- http://central.sonatype.org/pages/apache-maven.html -->
             <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.2</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -203,8 +215,81 @@ language governing permissions and limitations under the License.
         </dependency>
 
     </dependencies>
+    <!-- http://central.sonatype.org/pages/apache-maven.html -->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <profiles>
+        <!-- http://central.sonatype.org/pages/apache-maven.html -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.1.2</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.8</version>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <debug>true</debug>
+                            <minmemory>128m</minmemory>
+                            <maxmemory>1024m</maxmemory>
+                            <quiet>true</quiet>
+                            <doctitle>${project.name} ${project.version}</doctitle>
+                            <windowtitle>${project.name} ${project.version}</windowtitle>
+                            <testDoctitle>${project.name} ${project.version} (TEST API)</testDoctitle>
+                            <testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>
+                            <splitindex>true</splitindex>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                            <links>
+                                <link>http://docs.oracle.com/javase/7/docs/api/</link>
+                            </links>
+                            <linksource>true</linksource>
+                            <detectOfflineLinks>false</detectOfflineLinks>
+                        </configuration>
+                    </plugin>
+
+                    <!-- http://kohsuke.org/pgp-maven-plugin/secretkey.html instead of maven-gpg-plugin -->
+                    <plugin>
+                        <groupId>org.kohsuke</groupId>
+                        <artifactId>pgp-maven-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>m2e</id>
             <activation>
