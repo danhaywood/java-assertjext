@@ -61,3 +61,10 @@ if [ $? != 0 ]; then
     echo "... failed" >&2
     exit 1
 fi
+
+
+echo ""
+echo "now run:"
+echo ""
+echo "git push origin master && git push origin $RELEASE_VERSION"
+echo ""
